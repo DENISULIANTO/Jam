@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jam Digital Responsif</title>
+    <style>
+        /* Impor font digital */
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        :root {
+            /* Definisi warna neon */
+            --neon-color: #0F0;
+            /* Ukuran font default untuk mobile */
+            --font-size-base: 4rem; 
+        }
+
+        body {
+            background-color: #000; /* Latar belakang hitam */
+            color: var(--neon-color); 
+            font-family: 'Times New Roman', monospace; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; 
+            flex-direction: column;
+            text-shadow: 0 0 1px blue; /* Efek glow yang lebih kuat */
+            padding: 10px; /* Padding di sekitar body */
+        }
+
+        .clock-container {
+            display: flex;
+            gap: 10px; /* Jarak yang lebih kecil di mobile */
+            font-size: var(--font-size-base); 
+            padding: 10px;
+            border: 2px solid var(--neon-color); 
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), inset 0 0 10px rgba(0, 255, 0, 0.3); /* Tambahkan inset shadow */
+            background-color: rgba(0, 0, 0, 0.7); 
+            max-width: 95vw; /* Pastikan tidak melebihi lebar viewport */
+            transition: font-size 0.3s ease; /* Transisi untuk perubahan ukuran font */
+            font-weight: bold;
+        }
+
+        .colon {
+            animation: blink 1s infinite; /* Animasi berkedip untuk titik dua */
+            align-self: center; /* Pastikan titik dua berada di tengah */
+            margin: 0 5px; /* Margin horizontal untuk titik dua */
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .date-display {
+            font-size: 0.8em;
+            margin-top: 15px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color :#fff;
+        }
+
+        .day-display {
+            font-size: 0.6em;
+            margin-top: 5px;
+            letter-spacing: 2px;
+            color :#fff;
+        }
+
+        /* --- MEDIA QUERIES UNTUK RESPONSIVITAS --- */
+
+        /* Ukuran Tablet dan Netbook (Lebih dari 600px) */
+        @media (min-width: 600px) {
+            :root {
+                --font-size-base: 7rem;
+            }
+
+            .clock-container {
+                gap: 20px;
+                padding: 20px 30px;
+                border-width: 3px;
+                box-shadow: 0 0 50px rgba(0, 255, 0, 0.7), inset 0 0 15px rgba(0, 255, 0, 0.4);
+            }
+
+            .date-display {
+                font-size: 1.5rem;
+                margin-top: 25px;
+            }
+
+            .day-display {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Ukuran Desktop (Lebih dari 1024px) */
+        @media (min-width: 1024px) {
+            :root {
+                --font-size-base: 11rem;
+            }
+
+            .clock-container {
+                gap: 30px;
+                padding: 30px 50px;
+            }
+
+            .date-display {
+                font-size: 2rem;
+            }
+
+            .day-display {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <!-- Elemen untuk Jam, Menit, dan Detik -->
+        <span id="hours">00</span>
+        <span class="colon">:</span>
+        <span id="minutes">00</span>
+        <span class="colon">:</span>
+        <span id="seconds">00</span>
+    </div>
+    
+    <!-- Elemen untuk Tanggal dan Hari -->
+    <div id="date" class="date-display"></div>
+    <div id="day" class="day-display"></div>
+
+    <script>
+        // Array nama hari dan bulan dalam bahasa Indonesia
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        function updateClock() {
+            const now = new Date();
+
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+
+            // Format waktu menjadi dua digit (00-09)
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            // Memperbarui elemen jam
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+
+            // Memperbarui tanggal
+            const dayName = days[now.getDay()];
+            const dateNum = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            // Format tanggal: 24 OKTOBER 2025
+            document.getElementById('date').textContent = `${dateNum} ${monthName.toUpperCase()} ${year}`;
+
+            // Format hari: JUMAT
+            document.getElementById('day').textContent = dayName.toUpperCase();
+        }
+
+        // Panggil fungsi updateClock setiap detik
+        setInterval(updateClock, 1000);
+
+        // Panggil sekali saat halaman dimuat untuk inisialisasi
+        updateClock();
+    </script>
+</body>
+</html>
+
