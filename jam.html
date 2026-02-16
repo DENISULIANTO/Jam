@@ -1,174 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jam Digital Deni</title>
+    <title>Jam Digital Modern - Desktop Optimized</title>
     <style>
-        /* Impor font digital */
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
-        :root {
-            /* Definisi warna neon */
-            --neon-color: #0F0;
-            /* Ukuran font default untuk mobile */
-            --font-size-base: 4rem; 
-        }
-
-        body {
-            background-color: #000; /* Latar belakang hitam */
-            color: var(--neon-color); 
-            font-family: 'Times New Roman', monospace; 
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; 
-            flex-direction: column;
-            text-shadow: 0 0 1px blue; /* Efek glow yang lebih kuat */
-            padding: 10px; /* Padding di sekitar body */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            color: white;
+            /* Latar belakang gradasi bergerak */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
-        .clock-container {
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Kontainer Utama dengan Scaling Responsif */
+        .border-animation {
+            position: relative;
+            z-index: 10;
+            padding: 4px; 
+            border-radius: 2.5rem;
+            overflow: hidden;
             display: flex;
-            gap: 10px; /* Jarak yang lebih kecil di mobile */
-            font-size: var(--font-size-base); 
-            padding: 10px;
-            border: 2px solid var(--neon-color); 
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), inset 0 0 10px rgba(0, 255, 0, 0.3); /* Tambahkan inset shadow */
-            background-color: rgba(0, 0, 0, 0.7); 
-            max-width: 95vw; /* Pastikan tidak melebihi lebar viewport */
-            transition: font-size 0.3s ease; /* Transisi untuk perubahan ukuran font */
-            font-weight: bold;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            max-width: 90vw; /* Agar tidak meluap di layar kecil */
         }
 
-        .colon {
-            animation: blink 1s infinite; /* Animasi berkedip untuk titik dua */
-            align-self: center; /* Pastikan titik dua berada di tengah */
-            margin: 0 5px; /* Margin horizontal untuk titik dua */
+        /* Efek cahaya berputar */
+        .border-animation::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 250%; /* Ditinggikan agar rotasi menutup area persegi panjang */
+            background: conic-gradient(
+                #fd004c, #fe9000, #fff020, #3ede30, #1fb2f1, #0202fe, #ad00fe, #fd004c
+            );
+            animation: rotateBorder 4s linear infinite;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        @keyframes rotateBorder {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .date-display {
-            font-size: 0.8em;
-            margin-top: 15px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color :#fff;
+        /* Kontainer Dalam Jam */
+        .clock-container {
+            position: relative;
+            background: rgba(15, 15, 25, 0.9);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: clamp(1.5rem, 5vh, 3.5rem) clamp(2rem, 8vw, 6rem);
+            border-radius: calc(2.5rem - 4px);
+            text-align: center;
+            z-index: 1;
         }
 
-        .day-display {
-            font-size: 0.6em;
-            margin-top: 5px;
-            letter-spacing: 2px;
-            color :#fff;
+        #clock {
+            /* Menggunakan clamp untuk ukuran font yang otomatis mengecil di layar kecil */
+            font-size: clamp(3rem, 12vw, 7.5rem);
+            font-weight: 800;
+            letter-spacing: clamp(2px, 1vw, 8px);
+            margin: 0;
+            background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
         }
 
-        /* --- MEDIA QUERIES UNTUK RESPONSIVITAS --- */
+        #date {
+            font-size: clamp(0.9rem, 2.5vw, 1.6rem);
+            font-weight: 300;
+            margin-top: 1vh;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap; /* Mencegah tanggal turun ke baris baru */
+        }
 
-        /* Ukuran Tablet dan Netbook (Lebih dari 600px) */
-        @media (min-width: 600px) {
-            :root {
-                --font-size-base: 7rem;
-            }
+        /* Gaya Gelembung */
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: rise 10s infinite linear;
+            z-index: 1;
+        }
 
+        @keyframes rise {
+            0% { bottom: -100px; transform: translateX(0) scale(1); }
+            50% { transform: translateX(30px) scale(1.1); }
+            100% { bottom: 110vh; transform: translateX(-30px) scale(0.6); opacity: 0; }
+        }
+
+        /* Penyesuaian khusus untuk netbook atau layar pendek */
+        @media (max-height: 500px) {
             .clock-container {
-                gap: 20px;
-                padding: 20px 30px;
-                border-width: 3px;
-                box-shadow: 0 0 50px rgba(0, 255, 0, 0.7), inset 0 0 15px rgba(0, 255, 0, 0.4);
+                padding: 1rem 2rem;
             }
-
-            .date-display {
-                font-size: 1.5rem;
-                margin-top: 25px;
-            }
-
-            .day-display {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Ukuran Desktop (Lebih dari 1024px) */
-        @media (min-width: 1024px) {
-            :root {
-                --font-size-base: 11rem;
-            }
-
-            .clock-container {
-                gap: 30px;
-                padding: 30px 50px;
-            }
-
-            .date-display {
-                font-size: 2rem;
-            }
-
-            .day-display {
-                font-size: 1.5rem;
-            }
+            #clock { font-size: 4rem; }
         }
     </style>
 </head>
 <body>
-    <div class="clock-container">
-        <!-- Elemen untuk Jam, Menit, dan Detik -->
-        <span id="hours">00</span>
-        <span class="colon">:</span>
-        <span id="minutes">00</span>
-        <span class="colon">:</span>
-        <span id="seconds">00</span>
+
+    <div class="border-animation">
+        <div class="clock-container">
+            <div id="clock">00:00:00</div>
+            <div id="date">Memuat Tanggal...</div>
+        </div>
     </div>
-    
-    <!-- Elemen untuk Tanggal dan Hari -->
-    <div id="date" class="date-display"></div>
-    <div id="day" class="day-display"></div>
+
+    <div id="bubbles-wrapper"></div>
 
     <script>
-        // Array nama hari dan bulan dalam bahasa Indonesia
-        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
+        // Fungsi Update Jam & Tanggal
         function updateClock() {
             const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
 
-            // Format waktu menjadi dua digit (00-09)
-            hours = hours < 10 ? '0' + hours : hours;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-
-            // Memperbarui elemen jam
-            document.getElementById('hours').textContent = hours;
-            document.getElementById('minutes').textContent = minutes;
-            document.getElementById('seconds').textContent = seconds;
-
-            // Memperbarui tanggal
-            const dayName = days[now.getDay()];
-            const dateNum = now.getDate();
-            const monthName = months[now.getMonth()];
-            const year = now.getFullYear();
-
-            // Format tanggal: 24 OKTOBER 2025
-            document.getElementById('date').textContent = `${dateNum} ${monthName.toUpperCase()} ${year}`;
-
-            // Format hari: JUMAT
-            document.getElementById('day').textContent = dayName.toUpperCase();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString('id-ID', options);
         }
 
-        // Panggil fungsi updateClock setiap detik
-        setInterval(updateClock, 1000);
+        // Fungsi Gelembung yang dioptimalkan
+        function createBubble() {
+            const wrapper = document.getElementById('bubbles-wrapper');
+            if (wrapper.childElementCount > 15) return; 
 
-        // Panggil sekali saat halaman dimuat untuk inisialisasi
+            const bubble = document.createElement('div');
+            const sizeValue = Math.random() * 40 + 10;
+            const size = sizeValue + "px";
+            
+            bubble.className = 'bubble';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 95 + "vw";
+            bubble.style.animationDuration = Math.random() * 5 + 8 + "s";
+            bubble.style.opacity = Math.random() * 0.3;
+
+            wrapper.appendChild(bubble);
+
+            setTimeout(() => { bubble.remove(); }, 12000);
+        }
+
+        setInterval(updateClock, 1000);
+        setInterval(createBubble, 1000);
+
         updateClock();
     </script>
 </body>
