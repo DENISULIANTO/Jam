@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jam Digital Modern - Desktop Optimized</title>
+    <title>Jam Digital Modern - Fullscreen Mode</title>
     <style>
         body, html {
             margin: 0;
@@ -28,30 +28,31 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Kontainer Utama dengan Scaling Responsif */
+        /* Kontainer Utama yang diperbesar untuk tampilan Fullscreen */
         .border-animation {
             position: relative;
             z-index: 10;
-            padding: 4px; 
-            border-radius: 2.5rem;
+            padding: 8px; /* Border lebih tebal sedikit */
+            border-radius: 4rem;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
-            max-width: 90vw; /* Agar tidak meluap di layar kecil */
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+            width: 90vw; /* Mengambil 90% lebar layar */
+            max-width: 1200px;
         }
 
         /* Efek cahaya berputar */
         .border-animation::before {
             content: '';
             position: absolute;
-            width: 150%;
-            height: 250%; /* Ditinggikan agar rotasi menutup area persegi panjang */
+            width: 200%;
+            height: 400%; 
             background: conic-gradient(
                 #fd004c, #fe9000, #fff020, #3ede30, #1fb2f1, #0202fe, #ad00fe, #fd004c
             );
-            animation: rotateBorder 4s linear infinite;
+            animation: rotateBorder 3s linear infinite;
         }
 
         @keyframes rotateBorder {
@@ -59,62 +60,65 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Kontainer Dalam Jam */
+        /* Kontainer Dalam Jam - Area Hitam diperluas */
         .clock-container {
             position: relative;
-            background: rgba(15, 15, 25, 0.9);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            padding: clamp(1.5rem, 5vh, 3.5rem) clamp(2rem, 8vw, 6rem);
-            border-radius: calc(2.5rem - 4px);
+            background: rgba(10, 10, 20, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 8vh 5vw; /* Padding vertikal ditingkatkan */
+            border-radius: calc(4rem - 8px);
             text-align: center;
             z-index: 1;
+            width: 100%;
         }
 
         #clock {
-            /* Menggunakan clamp untuk ukuran font yang otomatis mengecil di layar kecil */
-            font-size: clamp(3rem, 12vw, 7.5rem);
+            /* Font jauh lebih besar: minimal 5rem, maksimal 15rem */
+            font-size: clamp(5rem, 20vw, 15rem);
             font-weight: 800;
-            letter-spacing: clamp(2px, 1vw, 8px);
+            letter-spacing: clamp(4px, 2vw, 15px);
             margin: 0;
-            background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+            background: linear-gradient(to bottom, #ffffff, #dcdcdc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            line-height: 1.1;
+            line-height: 1;
+            text-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
 
         #date {
-            font-size: clamp(0.9rem, 2.5vw, 1.6rem);
-            font-weight: 300;
-            margin-top: 1vh;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.7);
-            white-space: nowrap; /* Mencegah tanggal turun ke baris baru */
+            /* Ukuran tanggal juga diperbesar */
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-top: 2vh;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: capitalize;
         }
 
         /* Gaya Gelembung */
         .bubble {
             position: absolute;
             bottom: -100px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
-            animation: rise 10s infinite linear;
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.2);
+            animation: rise 12s infinite linear;
             z-index: 1;
         }
 
         @keyframes rise {
             0% { bottom: -100px; transform: translateX(0) scale(1); }
-            50% { transform: translateX(30px) scale(1.1); }
-            100% { bottom: 110vh; transform: translateX(-30px) scale(0.6); opacity: 0; }
+            50% { transform: translateX(50px) scale(1.2); }
+            100% { bottom: 110vh; transform: translateX(-50px) scale(0.5); opacity: 0; }
         }
 
-        /* Penyesuaian khusus untuk netbook atau layar pendek */
-        @media (max-height: 500px) {
-            .clock-container {
-                padding: 1rem 2rem;
-            }
+        /* Responsivitas untuk layar sangat kecil (Ponsel) */
+        @media (max-width: 600px) {
+            .border-animation { border-radius: 2rem; }
+            .clock-container { border-radius: calc(2rem - 8px); padding: 5vh 2vw; }
             #clock { font-size: 4rem; }
+            #date { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -130,7 +134,6 @@
     <div id="bubbles-wrapper"></div>
 
     <script>
-        // Fungsi Update Jam & Tanggal
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -139,33 +142,32 @@
 
             document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
 
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('id-ID', options);
         }
 
-        // Fungsi Gelembung yang dioptimalkan
         function createBubble() {
             const wrapper = document.getElementById('bubbles-wrapper');
-            if (wrapper.childElementCount > 15) return; 
+            if (wrapper.childElementCount > 12) return; 
 
             const bubble = document.createElement('div');
-            const sizeValue = Math.random() * 40 + 10;
+            const sizeValue = Math.random() * 60 + 20;
             const size = sizeValue + "px";
             
             bubble.className = 'bubble';
             bubble.style.width = size;
             bubble.style.height = size;
-            bubble.style.left = Math.random() * 95 + "vw";
-            bubble.style.animationDuration = Math.random() * 5 + 8 + "s";
-            bubble.style.opacity = Math.random() * 0.3;
+            bubble.style.left = Math.random() * 98 + "vw";
+            bubble.style.animationDuration = Math.random() * 5 + 10 + "s";
+            bubble.style.opacity = Math.random() * 0.2;
 
             wrapper.appendChild(bubble);
 
-            setTimeout(() => { bubble.remove(); }, 12000);
+            setTimeout(() => { bubble.remove(); }, 15000);
         }
 
         setInterval(updateClock, 1000);
-        setInterval(createBubble, 1000);
+        setInterval(createBubble, 1500);
 
         updateClock();
     </script>
